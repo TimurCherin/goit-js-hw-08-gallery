@@ -67,6 +67,7 @@ const gallery = document.querySelector(".gallery")
 const modalImg = document.querySelector(".lightbox__image")
 const modal = document.querySelector(".lightbox")
 let imageIndex;
+const overlay = document.querySelector("div.lightbox__overlay")
 const modalBtn = document.querySelector('button[data-action="close-lightbox"]')
 const markup = galleryItems.map(({preview, original, description}, index) => `<li class="gallery__item">
   <a
@@ -110,6 +111,11 @@ function closeEsc(event) {
     modalImg.removeAttribute("src", imgUrl)
   }
 };
+
+overlay.addEventListener("click", e => {
+  modal.classList.remove("is-open")
+  modalImg.removeAttribute("src", imgUrl)
+});
 
 document.addEventListener("keydown", (e) => {
   e.preventDefault();
