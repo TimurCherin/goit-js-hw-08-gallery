@@ -98,4 +98,10 @@ modalBtn.addEventListener("click", closeModal)
 function closeModal() {
   modal.classList.remove("is-open")
   modalImg.removeAttribute("src", imgUrl)
+};
+document.addEventListener("keydown", closeEsc)
+function closeEsc(event) {
+  if (event.code === "Escape") {
+    modal.classList.remove("is-open")
+  }
 }
