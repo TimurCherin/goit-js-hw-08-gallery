@@ -66,8 +66,9 @@ const galleryItems = [
 const gallery = document.querySelector(".gallery")
 const modalImg = document.querySelector(".lightbox__image")
 const modal = document.querySelector(".lightbox")
+let imageIndex;
 const modalBtn = document.querySelector('button[data-action="close-lightbox"]')
-const markup = galleryItems.map(({preview, original, description}) => `<li class="gallery__item">
+const markup = galleryItems.map(({preview, original, description}, index) => `<li class="gallery__item">
   <a
     class="gallery__link"
     href="${original}"
@@ -76,6 +77,7 @@ const markup = galleryItems.map(({preview, original, description}) => `<li class
       class="gallery__image"
       src="${preview}"
       data-source="${original}"
+      data-id="${index}"
       alt="${description}"
     />
   </a>
@@ -85,7 +87,8 @@ gallery.insertAdjacentHTML("beforeend", markup)
 gallery.addEventListener("click", onClick)
 
 function onClick(e) {
-    const currentImg = e.target    
+  const currentImg = e.target 
+  imageIndex = currentImg.dataset.id
     if (currentImg.nodeName !== "IMG") {
         return   
     }
@@ -99,9 +102,31 @@ function closeModal() {
   modal.classList.remove("is-open")
   modalImg.removeAttribute("src", imgUrl)
 };
+
 document.addEventListener("keydown", closeEsc)
 function closeEsc(event) {
   if (event.code === "Escape") {
     modal.classList.remove("is-open")
+    modalImg.removeAttribute("src", imgUrl)
   }
-}
+};
+
+document.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (e.code === "ArrowLeft") {
+    imageIndex -= 1;
+    if (imageIndex < 0) {
+      imageIndex = galleryItems.length - 1;
+    }
+    let imageUrl = galleryItems[imageIndex].original;
+    modalImg.setAttribute("src", imageUrl);
+  }
+  if (e.code === "ArrowRight") {
+    imageIndex += 1;
+    if (imageIndex > galleryItems.length - 1) {
+      imageIndex = 0;
+    }
+    let imageUrl = galleryItems[imageIndex].original;
+    modalImg.setAttribute("src", imageUrl);
+  }
+});
